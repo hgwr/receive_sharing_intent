@@ -123,7 +123,9 @@ class ReceiveSharingIntentPlugin : FlutterPlugin, ActivityAware, MethodCallHandl
             }
             (intent.type == null || intent.type?.startsWith("text") == true)
                     && intent.action == Intent.ACTION_SEND -> { // Sharing text
-                val value = intent.getStringExtra(Intent.EXTRA_TEXT)
+                val subject = intent.getStringExtra(Intent.EXTRA_SUBJECT)
+                val text = intent.getStringExtra(Intent.EXTRA_TEXT)
+                val value = if (subject != null && text != null) "$subject\n$text" else text
                 if (initial) initialText = value
                 latestText = value
                 eventSinkText?.success(latestText)
